@@ -54,8 +54,8 @@ export default function Scene() {
       camera={{ position: [0, 0, 60], fov: 50, near: 0.1, far: 4000 }}
       gl={{ antialias: true, preserveDrawingBuffer: true }}
     >
-      <color attach="background" args={["#05060a"]} />
-      <fog attach="fog" args={["#05060a", 80, 320]} />
+      <color attach="background" args={["#000000"]} />
+      <fog attach="fog" args={["#000000", 80, 320]} />
       <ambientLight intensity={0.7} />
       <pointLight position={[20, 20, 30]} intensity={1.0} />
 

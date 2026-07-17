@@ -168,7 +168,7 @@ export default function AttentionDistrict() {
                 anchorY="bottom"
                 color={t.is_special ? "#6d7aa0" : "#e6ecff"}
                 outlineWidth={0.02}
-                outlineColor="#05060a"
+                outlineColor="#000000"
               >
                 {tokenLabel(t)}
               </Text>

@@ -62,7 +62,7 @@ export default function TokenizerDistrict() {
           anchorY="middle"
           color="#e6ecff"
           outlineWidth={0.02}
-          outlineColor="#05060a"
+          outlineColor="#000000"
         >
           {`“${data.sentence}”`}
         </Text>

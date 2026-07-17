@@ -77,7 +77,7 @@ export default function TransformerDistrict() {
     <group>
       {/* --- Transformer layer stack --- */}
       <Billboard position={[STACK_X, stackHeight + 1.6, 0]}>
-        <Text fontSize={0.5} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#05060a">
+        <Text fontSize={0.5} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#000000">
           Layers (activation magnitude)
         </Text>
       </Billboard>
@@ -105,7 +105,7 @@ export default function TransformerDistrict() {
 
       {/* --- Probability skyline (real top-k) --- */}
       <Billboard position={[4, 9.4, 0]}>
-        <Text fontSize={0.5} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#05060a">
+        <Text fontSize={0.5} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#000000">
           Next-token probabilities (top {topK})
         </Text>
       </Billboard>
@@ -132,7 +132,7 @@ export default function TransformerDistrict() {
                 anchorX="center"
                 color={chosen ? "#ffe6a0" : "#cfe8ff"}
                 outlineWidth={0.015}
-                outlineColor="#05060a"
+                outlineColor="#000000"
               >
                 {cand ? cand.text.trim() || "␣" : ""}
               </Text>
@@ -153,7 +153,7 @@ export default function TransformerDistrict() {
           anchorX="center"
           color="#b6f0c8"
           outlineWidth={0.015}
-          outlineColor="#05060a"
+          outlineColor="#000000"
         >
           {frames.length === 0
             ? genStatus === "streaming"

@@ -54,7 +54,7 @@ export default function EmbeddingDistrict() {
       </mesh>
 
       <Billboard position={[0, 10.5, 0]}>
-        <Text fontSize={0.6} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#05060a">
+        <Text fontSize={0.6} anchorX="center" color="#e6ecff" outlineWidth={0.02} outlineColor="#000000">
           {layer === 0 ? "Token embeddings" : `Hidden state · layer ${layer}`}
         </Text>
         <Text position={[0, -0.85, 0]} fontSize={0.26} anchorX="center" color="#8a97bd">
@@ -83,7 +83,7 @@ export default function EmbeddingDistrict() {
                 anchorY="bottom"
                 color={t.is_special ? "#6d7aa0" : "#e6ecff"}
                 outlineWidth={0.02}
-                outlineColor="#05060a"
+                outlineColor="#000000"
               >
                 {label(t)}
               </Text>

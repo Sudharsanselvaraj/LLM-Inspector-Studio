@@ -124,7 +124,7 @@ export default function GenerationScene() {
             anchorX="left"
             color="#e6ecff"
             outlineWidth={0.02}
-            outlineColor="#05060a"
+            outlineColor="#000000"
           >
             {op.label}
             {op.layer != null ? ` · Layer ${op.layer}` : ""}
