@@ -14,6 +14,10 @@ export default function WalkthroughPane() {
   const prev = useStore((s) => s.prevChapter);
   const wtModel = useStore((s) => s.wtModel);
   const setWtModel = useStore((s) => s.setWtModel);
+  const wtPlaying = useStore((s) => s.wtPlaying);
+  const toggleWtPlay = useStore((s) => s.toggleWtPlay);
+  const playSpeed = useStore((s) => s.playSpeed);
+  const setPlaySpeed = useStore((s) => s.setPlaySpeed);
 
   // Load the real example forward pass once.
   useEffect(() => {
@@ -39,6 +43,27 @@ export default function WalkthroughPane() {
         >
           ›
         </button>
+      </div>
+
+      <div className="wt-play">
+        <button
+          className="pb-btn"
+          onClick={toggleWtPlay}
+          disabled={idx >= CHAPTERS.length - 1 && !wtPlaying}
+          title="Autoplay chapters"
+        >
+          {wtPlaying ? "⏸" : "▶"}
+        </button>
+        <button
+          className="chip-btn"
+          onClick={() => setPlaySpeed(playSpeed >= 4 ? 0.5 : playSpeed * 2)}
+          title="Autoplay speed"
+        >
+          {playSpeed}× speed
+        </button>
+        <span className="side-hint">
+          {wtPlaying ? "playing walkthrough…" : "auto-advance chapters"}
+        </span>
       </div>
 
       <div className="side-title" style={{ marginTop: 6 }}>

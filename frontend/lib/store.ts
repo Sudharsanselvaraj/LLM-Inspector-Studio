@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { analyzeSentence, fetchArchitecture } from "./api";
+import { layerAnchors, anchorPosFor } from "./playback";
 import { wsGenerate } from "./ws";
 import { cueDistrict, cueToken, setMuted as setSoundMuted } from "./sound";
 import { annotateTensors } from "./tensorName";
@@ -89,19 +90,35 @@ interface NeuroState {
   opPlaying: boolean;
   followMode: boolean;
   view2D: boolean;
+  playSpeed: number; // animation-speed multiplier (pacing only, never data)
+  autoStarted: boolean; // has autoplay kicked off for the current trace?
   setOpIndex: (i: number) => void;
   stepOp: (dir: 1 | -1) => void;
   toggleOpPlay: () => void;
   toggleFollow: () => void;
   toggleView2D: () => void;
+  setPlaySpeed: (n: number) => void;
+  setAutoStarted: (b: boolean) => void;
+  skipToNextLayer: () => void;
+  skipToNextToken: () => void;
+
+  // Optional overlays (off/neutral by default where the addendum asks).
+  showEquations: boolean; // per-layer LaTeX (kept on: it's the spec's teaching content)
+  devMode: boolean; // raw sampled tensor values + indices for the active op
+  brightness: number; // global scene-brightness multiplier (user preference)
+  toggleEquations: () => void;
+  toggleDevMode: () => void;
+  setBrightness: (n: number) => void;
 
   // Educational walkthrough.
   wtChapter: number;
   wtModel: string;
+  wtPlaying: boolean; // chapter autoplay (reuses the playback engine's pacing)
   setWtChapter: (i: number) => void;
   nextChapter: () => void;
   prevChapter: () => void;
   setWtModel: (id: string) => void;
+  toggleWtPlay: () => void;
 }
 
 let genSocket: WebSocket | null = null;
@@ -234,11 +251,14 @@ export const useStore = create<NeuroState>((set) => ({
   opPlaying: false,
   followMode: true,
   view2D: false,
+  playSpeed: 0.5,
+  autoStarted: false,
   setOpIndex: (i) =>
     set((s) => {
       const n = s.genMeta?.op_catalog?.length ?? 0;
       return { opIndex: Math.max(0, Math.min(i, Math.max(0, n - 1))), opPlaying: false };
     }),
+  // Manual step is op-by-op (fine-grained) and pauses autoplay.
   stepOp: (dir) =>
     set((s) => {
       const n = s.genMeta?.op_catalog?.length ?? 0;
@@ -251,18 +271,59 @@ export const useStore = create<NeuroState>((set) => ({
     set((s) => {
       const n = s.genMeta?.op_catalog?.length ?? 0;
       if (n === 0) return {};
-      const atEnd = s.opIndex >= n - 1;
-      return { opPlaying: !s.opPlaying, opIndex: !s.opPlaying && atEnd ? 0 : s.opIndex };
+      // Restart from the top only if we're truly at the very end of the trace.
+      const atLastOp = s.opIndex >= n - 1;
+      const atLastToken = s.playIndex >= s.genFrames.length - 1;
+      const rewind = !s.opPlaying && atLastOp && atLastToken;
+      return {
+        opPlaying: !s.opPlaying,
+        opIndex: rewind ? 0 : s.opIndex,
+        playIndex: rewind ? 0 : s.playIndex,
+      };
     }),
   toggleFollow: () => set((s) => ({ followMode: !s.followMode })),
   toggleView2D: () => set((s) => ({ view2D: !s.view2D })),
+  setPlaySpeed: (n) => set({ playSpeed: Math.max(0.25, Math.min(n, 4)) }),
+  setAutoStarted: (b) => set({ autoStarted: b }),
+
+  // Skip = jump straight to the next layer/token without animating the ops in
+  // between (the follow camera then eases to the new target).
+  skipToNextLayer: () =>
+    set((s) => {
+      const cat = s.genMeta?.op_catalog ?? [];
+      const nLayers = s.genMeta?.num_layers ?? 0;
+      if (cat.length === 0) return {};
+      const anchors = layerAnchors(cat, nLayers);
+      const pos = anchorPosFor(anchors, s.opIndex);
+      if (pos < anchors.length - 1) return { opIndex: anchors[pos + 1] };
+      // Past the last layer: roll to the next token's forward pass.
+      if (s.playIndex < s.genFrames.length - 1)
+        return { playIndex: s.playIndex + 1, opIndex: 0 };
+      return {};
+    }),
+  skipToNextToken: () =>
+    set((s) => {
+      if (s.playIndex < s.genFrames.length - 1)
+        return { playIndex: s.playIndex + 1, opIndex: 0 };
+      return {};
+    }),
+
+  showEquations: true,
+  devMode: false,
+  brightness: 1,
+  toggleEquations: () => set((s) => ({ showEquations: !s.showEquations })),
+  toggleDevMode: () => set((s) => ({ devMode: !s.devMode })),
+  setBrightness: (n) => set({ brightness: Math.max(0.3, Math.min(n, 2.5)) }),
 
   wtChapter: 0,
   wtModel: "qwen05",
-  setWtChapter: (i) => set({ wtChapter: Math.max(0, i) }),
+  wtPlaying: false,
+  // Manual chapter changes stop chapter autoplay so it doesn't fight the user.
+  setWtChapter: (i) => set({ wtChapter: Math.max(0, i), wtPlaying: false }),
   nextChapter: () => set((s) => ({ wtChapter: s.wtChapter + 1 })),
-  prevChapter: () => set((s) => ({ wtChapter: Math.max(0, s.wtChapter - 1) })),
+  prevChapter: () => set((s) => ({ wtChapter: Math.max(0, s.wtChapter - 1), wtPlaying: false })),
   setWtModel: (id) => set({ wtModel: id }),
+  toggleWtPlay: () => set((s) => ({ wtPlaying: !s.wtPlaying })),
 
   startGeneration: (prompt) => {
     genSocket?.close();
@@ -276,6 +337,7 @@ export const useStore = create<NeuroState>((set) => ({
       isPlaying: false,
       opIndex: 0,
       opPlaying: false,
+      autoStarted: false,
     });
 
     genSocket = wsGenerate(prompt, { maxNewTokens: 40, topK: 10, trace: true }, {
@@ -287,7 +349,12 @@ export const useStore = create<NeuroState>((set) => ({
           set((s) => {
             const frames = [...s.genFrames, raw as unknown as TokenFrame];
             cueToken(frames.length);
-            return { genFrames: frames, playIndex: frames.length - 1 };
+            // Before autoplay takes over, track the newest token so the strip
+            // shows generation live; once autoplay starts it owns the cursor.
+            return {
+              genFrames: frames,
+              playIndex: s.autoStarted ? s.playIndex : frames.length - 1,
+            };
           });
         } else if (f.type === "done") {
           set({

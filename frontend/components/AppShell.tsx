@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import SceneLoader from "./SceneLoader";
+import PlaybackEngine from "./PlaybackEngine";
 import TopBar from "./ui/TopBar";
 import Sidebar from "./ui/Sidebar";
 import RightPanel from "./ui/RightPanel";
@@ -28,6 +29,7 @@ export default function AppShell() {
 
   return (
     <div className="app">
+      <PlaybackEngine />
       <TopBar />
       <Sidebar />
       <div
