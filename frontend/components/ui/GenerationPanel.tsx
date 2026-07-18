@@ -9,6 +9,7 @@ import {
   roleToOpKey,
   type OpKey,
 } from "@/lib/formulas";
+import { activeLayerOf, phaseInfo } from "@/lib/playback";
 import Formula from "./Formula";
 
 function WeightPreview({ data }: { data: number[][] }) {
@@ -50,6 +51,10 @@ export default function GenerationPanel() {
   const opIndex = useStore((s) => s.opIndex);
   const stepOp = useStore((s) => s.stepOp);
   const status = useStore((s) => s.genStatus);
+  const showEquations = useStore((s) => s.showEquations);
+  const devMode = useStore((s) => s.devMode);
+  const playIndex = useStore((s) => s.playIndex);
+  const frame = useStore((s) => (s.playIndex >= 0 ? s.genFrames[s.playIndex] : null));
 
   const catalog = meta?.op_catalog ?? [];
   if (catalog.length === 0) {
@@ -68,6 +73,9 @@ export default function GenerationPanel() {
   const family = detectArch(meta?.architecture);
   const fk = toFormulaKey(op.op_key);
   const blockKey = fk ? contextOp(fk) : null;
+  const nLayers = meta?.num_layers ?? 0;
+  const activeLayer = activeLayerOf(op, nLayers);
+  const phase = phaseInfo(frame, meta?.prompt_len ?? 0, meta?.uses_kv_cache);
 
   return (
     <div className="rightpanel genpanel">
@@ -84,7 +92,14 @@ export default function GenerationPanel() {
         </div>
       </div>
 
-      {blockKey &&
+      {phase && (
+        <div className={"gp-phase " + phase.phase}>
+          <b>{phase.label}</b> · {phase.detail}
+        </div>
+      )}
+
+      {showEquations &&
+        blockKey &&
         getFormula(family, blockKey).latex.map((l, i) => (
           <Formula key={i} latex={l} />
         ))}
@@ -111,7 +126,7 @@ export default function GenerationPanel() {
 
         {op.weight_preview.length > 0 && <WeightPreview data={op.weight_preview} />}
 
-        {fk && (
+        {showEquations && fk && (
           <div className="gp-crumb-formula">
             {getFormula(family, fk).latex.map((l, i) => (
               <Formula key={i} latex={l} />
@@ -145,6 +160,54 @@ export default function GenerationPanel() {
           <b>{op.param_count.toLocaleString()}</b>
         </div>
       </div>
+
+      {devMode && (
+        <div className="gp-dev">
+          <div className="gp-dev-title">Dev · raw sampled values</div>
+          <div className="gp-dev-row">
+            <span>op index</span>
+            <b>
+              {op.index} / {catalog.length - 1}
+            </b>
+          </div>
+          <div className="gp-dev-row">
+            <span>op key</span>
+            <b>{op.op_key}</b>
+          </div>
+          {frame && activeLayer != null && frame.layer_stats?.length > 0 && (
+            <div className="gp-dev-row">
+              <span>mean|act| L{activeLayer}</span>
+              <b>
+                {frame.layer_stats[
+                  Math.max(0, Math.min(activeLayer + 1, frame.layer_stats.length - 1))
+                ]?.toFixed(4)}
+              </b>
+            </div>
+          )}
+          {frame && (
+            <div className="gp-dev-row">
+              <span>token logprob</span>
+              <b>{frame.chosen.logprob.toFixed(4)}</b>
+            </div>
+          )}
+          {op.weight_preview.length > 0 && (
+            <>
+              <div className="gp-dev-sub">
+                weight[0, :8] · tensor sample (real values)
+              </div>
+              <div className="gp-dev-vals">
+                {op.weight_preview[0].map((v, i) => (
+                  <span key={i}>{v.toFixed(3)}</span>
+                ))}
+              </div>
+            </>
+          )}
+          <div className="gp-dev-note">
+            Sampled slices (8×8 weight preview, per-layer stat) — not the full
+            tensors. Real numbers from the loaded model / recorded trace.
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function GenerationControls() {
     <div className="panel selector">
       <form
         className="sentence-form"
-        style={{ marginTop: 0 }}
+        style={{ marginTop: 0, flexDirection: "column", alignItems: "stretch" }}
         onSubmit={(e) => {
           e.preventDefault();
           const p = prompt.trim();
@@ -28,8 +28,14 @@ export default function GenerationControls() {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Prompt for the model to generate from…"
           spellCheck={false}
+          style={{ minWidth: 0 }}
         />
-        <button className="primary" type="submit" disabled={streaming}>
+        <button
+          className="primary"
+          type="submit"
+          disabled={streaming}
+          style={{ width: "100%" }}
+        >
           {streaming ? "Generating…" : "Generate"}
         </button>
       </form>
