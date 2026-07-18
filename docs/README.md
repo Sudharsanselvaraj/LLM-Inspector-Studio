@@ -14,6 +14,8 @@ nothing is illustrative or hardcoded.
 - [**GGUF format**](gguf-format.md) — what the client-side GGUF parser reads and
   how it maps to the UI.
 - [**Development**](development.md) — setup, running, and where things live.
+- [**Contribution ideas**](contributing-ideas.md) — concrete openings by
+  difficulty, with files to touch and how to verify.
 - [**Deployment**](deployment.md) — hosting the frontend and backend (and why the
   backend can't be serverless).
 - [**Verification**](verification.md) — how the "the data is real" claim is

@@ -129,7 +129,9 @@ See [`docs/verification.md`](docs/verification.md) for the full evidence with ex
 ## Contributing
 
 Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[Code of Conduct](CODE_OF_CONDUCT.md). Found a wrong number? That's a top-priority bug.
+[Code of Conduct](CODE_OF_CONDUCT.md). For a concrete list of what needs doing
+(by difficulty, with files and verification steps), see
+[docs/contributing-ideas.md](docs/contributing-ideas.md). Found a wrong number? That's a top-priority bug.
 Security issues: see [SECURITY.md](SECURITY.md) (report privately, not via public issues).
 
 ## License
