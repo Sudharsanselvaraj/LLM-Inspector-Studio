@@ -14,12 +14,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Sudharsanselvaraj/LLM-Studio/blob/main/.github/assets/demo.mp4">
-    <img src=".github/assets/demo-poster.jpg" alt="Watch the LLMStudio demo" width="820" />
-  </a>
+  <img src=".github/assets/demo.gif" alt="LLMStudio — live demo" width="820" />
 </p>
 
-<p align="center"><sub>▶ <a href="https://github.com/Sudharsanselvaraj/LLM-Studio/blob/main/.github/assets/demo.mp4">Watch the demo</a> — real Qwen2.5-0.5B internals: architecture point cloud, live generation, guided walkthrough.</sub></p>
+<p align="center"><sub>▶ <a href="https://github.com/Sudharsanselvaraj/LLM-Studio/blob/main/.github/assets/demo.mp4">Watch the full-quality demo</a> — real Qwen2.5-0.5B internals: architecture point cloud, live generation, guided walkthrough.</sub></p>
 
 ---
 
