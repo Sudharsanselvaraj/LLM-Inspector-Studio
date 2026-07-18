@@ -13,11 +13,11 @@
   <a href="https://github.com/Sudharsanselvaraj/LLM-Studio/stargazers"><img src="https://img.shields.io/github/stars/Sudharsanselvaraj/LLM-Studio?style=flat&color=eab308" alt="Stars" /></a>
 </p>
 
+---
+
 <p align="center">
   <img src=".github/assets/demo.gif" alt="LLMStudio — live demo" width="820" />
 </p>
-
----
 
 **LLMStudio** is a browser-based 3D inspector for the internals of a language model. Load a
 live model or drop in a `.gguf` file and explore its tensors, run a real greedy generation
