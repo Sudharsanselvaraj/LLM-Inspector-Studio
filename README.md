@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="TokenPrint logo.png" alt="TokenPrint" width="440" />
+  <img src="TokenPrint logo.png" alt="TokenPrint" width="350" />
 </div>
 
 <h3 align="center">See a language model think — real internals, real forward pass, real-time 3D.</h3>
