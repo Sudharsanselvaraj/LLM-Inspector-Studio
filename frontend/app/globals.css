@@ -503,6 +503,14 @@ code {
   background: var(--bg);
 }
 
+.app.mode-debugger {
+  grid-template-columns: 0px 1fr 360px;
+}
+
+.app.mode-debugger .sidebar {
+  display: none;
+}
+
 /* --- Top bar --- */
 .topbar {
   grid-area: top;

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
 
+const EMPTY: never[] = [];
+
 export default function NumberProvenance() {
-  const catalog = useStore((s) => s.genMeta?.op_catalog ?? []);
+  const catalog = useStore((s) => s.genMeta?.op_catalog ?? EMPTY);
   const provenanceTrail = useStore((s) => s.provenanceTrail);
   const setProvenanceTrail = useStore((s) => s.setProvenanceTrail);
   const setOpIndex = useStore((s) => s.setOpIndex);

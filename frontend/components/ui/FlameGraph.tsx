@@ -4,8 +4,10 @@ import { useMemo, useState } from "react";
 import { useStore } from "@/lib/store";
 import { opColorOf, opKindOf } from "@/lib/sceneColors";
 
+const EMPTY: never[] = [];
+
 export default function FlameGraph() {
-  const catalog = useStore((s) => s.genMeta?.op_catalog ?? []);
+  const catalog = useStore((s) => s.genMeta?.op_catalog ?? EMPTY);
   const [drill, setDrill] = useState<string | null>(null);
 
   interface FGNode { kind: string; total: number; count: number; children: { label: string; total: number; count: number }[]; }

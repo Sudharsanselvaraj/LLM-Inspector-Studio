@@ -4,8 +4,12 @@ import { useStore } from "@/lib/store";
 import { activeLayerOf } from "@/lib/playback";
 import { opKindOf } from "@/lib/sceneColors";
 
+// Stable empty array reference — avoids "getSnapshot should be cached" infinite loop.
+const EMPTY_CATALOG: NonNullable<ReturnType<typeof useStore.getState>["genMeta"]>["op_catalog"] =
+  [];
+
 export default function BreakpointGutter() {
-  const catalog = useStore((s) => s.genMeta?.op_catalog ?? []);
+  const catalog = useStore((s) => s.genMeta?.op_catalog ?? EMPTY_CATALOG);
   const nLayers = useStore((s) => s.genMeta?.num_layers ?? 0);
   const breakpoints = useStore((s) => s.breakpoints);
   const toggleBreakpoint = useStore((s) => s.toggleBreakpoint);

@@ -6,11 +6,13 @@ import { useStore } from "@/lib/store";
 type SortKey = "layer" | "meanAct" | "maxAct" | "tokens" | "heads";
 type SortDir = "asc" | "desc";
 
+const EMPTY: never[] = [];
+
 export default function LayerTable() {
   const frames = useStore((s) => s.genFrames);
   const nLayers = useStore((s) => s.genMeta?.num_layers ?? 0);
   const opIndex = useStore((s) => s.opIndex);
-  const catalog = useStore((s) => s.genMeta?.op_catalog ?? []);
+  const catalog = useStore((s) => s.genMeta?.op_catalog ?? EMPTY);
   const activeLayer = useMemo(() => {
     if (!catalog.length || opIndex >= catalog.length) return null;
     const op = catalog[opIndex];

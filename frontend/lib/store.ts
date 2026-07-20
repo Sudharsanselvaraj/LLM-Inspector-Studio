@@ -116,6 +116,7 @@ interface NeuroState {
   opIndex: number;
   opPlaying: boolean;
   followMode: boolean;
+  userOrbiting: boolean;
   view2D: boolean;
   playSpeed: number; // animation-speed multiplier (pacing only, never data)
   autoStarted: boolean; // has autoplay kicked off for the current trace?
@@ -409,6 +410,7 @@ export const useStore = create<NeuroState>((set) => ({
   opIndex: 0,
   opPlaying: false,
   followMode: true,
+  userOrbiting: false,
   view2D: false,
   playSpeed: 0.5,
   autoStarted: false,
@@ -499,6 +501,7 @@ export const useStore = create<NeuroState>((set) => ({
   toggleLightMode: () => set((s) => ({ lightMode: !s.lightMode })),
 
   toggleFollow: () => set((s) => ({ followMode: !s.followMode })),
+  setUserOrbiting: (b: boolean) => set({ userOrbiting: b }),
   toggleView2D: () => set((s) => ({ view2D: !s.view2D })),
   setPlaySpeed: (n) => set({ playSpeed: Math.max(0.25, Math.min(n, 4)) }),
   setAutoStarted: (b) => set({ autoStarted: b }),

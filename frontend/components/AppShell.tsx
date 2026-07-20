@@ -71,7 +71,7 @@ export default function AppShell() {
   const hov = hovName ? arch?.tensors.find((t) => t.name === hovName) : null;
 
   return (
-    <div className={"app" + (lightMode ? " light" : "")}>
+    <div className={`app mode-${mode}${lightMode ? " light" : ""}`}>
       <PlaybackEngine />
       <TopBar />
       <Sidebar />

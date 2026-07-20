@@ -64,13 +64,13 @@ function GenBottomBar() {
           {opPlaying ? "\u23F8" : "\u25B6"}
         </button>
         <button className="pb-btn" onClick={skipToNextLayer} title="Skip to next layer">
-          \u23ED
+          ⏭
         </button>
         <button className="chip-btn" onClick={skipToNextToken} title="Skip to next token">
-          next token \u23E9
+          next token ⏩
         </button>
         <button className="chip-btn" onClick={cycleSpeed} title="Animation speed">
-          {playSpeed}\u00D7 speed
+          {playSpeed}× speed
         </button>
 
         {phase && (
@@ -113,7 +113,7 @@ function GenBottomBar() {
 
         {genStatus === "done" && traceSource === "live" && (
           <button className="chip-btn" onClick={downloadTrace} title="Download .tokenprint.json">
-            \u2193 trace
+            ↓ trace
           </button>
         )}
         {traceSource === "file" && (
@@ -123,7 +123,7 @@ function GenBottomBar() {
 
       <div className="bb-row bb-tokens">
         <span className="ts-label">tokens</span>
-        {truncated && <span className="tok prompt">\u2026</span>}
+        {truncated && <span className="tok prompt">…</span>}
         {promptTail.map((t, i) => (
           <span key={"p" + i} className="tok prompt">
             {disp(t)}
@@ -137,7 +137,7 @@ function GenBottomBar() {
             {disp(t)}
           </span>
         ))}
-        {status === "streaming" && <span className="tok cursor">\u258C</span>}
+        {status === "streaming" && <span className="tok cursor">▌</span>}
       </div>
     </div>
   );
@@ -157,10 +157,10 @@ function WtBottomBar() {
           {wtPlaying ? "\u23F8" : "\u25B6"}
         </button>
         <button className="chip-btn" onClick={prev} title="Previous chapter">
-          \u25C0 prev
+          ◀ prev
         </button>
         <button className="chip-btn" onClick={next} title="Next chapter">
-          next \u25B6
+          next ▶
         </button>
         <span className="bb-info">Chapter {chapterIdx + 1}</span>
       </div>

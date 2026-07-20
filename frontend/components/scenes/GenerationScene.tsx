@@ -69,17 +69,33 @@ export default function GenerationScene() {
 
   const { camera } = useThree();
   const controls = useThree((s) => s.controls) as OrbitControlsImpl | null;
+  const userOrbiting = useStore((s) => s.userOrbiting);
+  const setUserOrbiting = useStore((s) => s.setUserOrbiting);
 
+  // Always keep OrbitControls enabled so the user can rotate freely.
+  // When they grab the canvas, pause the auto-follow glide for 2 seconds.
   useEffect(() => {
-    if (controls) controls.enabled = !followMode;
-  }, [controls, followMode]);
+    if (!controls) return;
+    controls.enabled = true;
+    const onStart = () => { setUserOrbiting(true); };
+    const onEnd = () => {
+      // Resume follow after 2 s of no interaction
+      setTimeout(() => setUserOrbiting(false), 2000);
+    };
+    controls.addEventListener("start", onStart);
+    controls.addEventListener("end", onEnd);
+    return () => {
+      controls.removeEventListener("start", onStart);
+      controls.removeEventListener("end", onEnd);
+    };
+  }, [controls, setUserOrbiting]);
 
   const opCol: [number, number, number] = op
     ? opColorOf(op.op_key, activeKind ?? "norm")
     : [0.5, 0.6, 0.8];
 
   useFrame(() => {
-    if (followMode && activeLayer != null && controls) {
+    if (followMode && !userOrbiting && activeLayer != null && controls) {
       const y = -(activeLayer + 1) * GAP;
       const dest = view2D ? tmp.set(0, y, 11) : tmp.set(7, y + 1.2, 9);
       camera.position.lerp(dest, 0.07);
