@@ -18,6 +18,8 @@ export default function TopBar() {
   const arch = useStore((s) => s.arch);
   const m = arch?.metadata;
   const { share } = useSnapshotUrl();
+  const tileView = useStore((s) => s.tileView);
+  const setTileView = useStore((s) => s.setTileView);
 
   const [copied, setCopied] = useState(false);
   const handleShare = () => {
@@ -74,6 +76,15 @@ export default function TopBar() {
           <button className="share-btn" onClick={handleShare} title="Copy snapshot URL">
             {copied ? "✓ Copied" : "Share"}
           </button>
+          {(mode === "explorer") && (
+            <button
+              className={"chip-btn" + (tileView ? " on" : "")}
+              onClick={() => setTileView(!tileView)}
+              title="Toggle tile grid view"
+            >
+              {tileView ? "3D" : "Grid"}
+            </button>
+          )}
         </div>
     </div>
   );

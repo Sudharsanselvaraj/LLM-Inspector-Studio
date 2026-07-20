@@ -2084,6 +2084,70 @@ code {
   text-align: right;
 }
 
+/* --- Distribution Panel (Phase 2) ------------------------------------------ */
+.dist-panel {
+  position: absolute;
+  bottom: 60px;
+  left: 680px;
+  width: 240px;
+  background: rgba(10, 10, 12, 0.88);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 12px;
+  backdrop-filter: blur(6px);
+  z-index: 15;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.dist-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.dist-subtitle {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.dist-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dist-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dist-bar-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted);
+  min-width: 22px;
+  text-align: right;
+}
+.dist-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dist-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, hsl(220 85% 60%), hsl(270 85% 55%));
+  border-radius: 3px;
+  min-width: 1px;
+  transition: width 0.2s;
+}
+.dist-bar-val {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted);
+  min-width: 32px;
+  text-align: right;
+}
+
 /* --- Config Diff (v0.5) --------------------------------------------------- */
 .config-diff {
   position: absolute;
@@ -2595,4 +2659,97 @@ code {
 }
 .share-btn:hover {
   background: rgba(59, 130, 246, 0.12);
+}
+
+/* --- Tile Grid View (Phase 2) ----------------------------------------------- */
+.tileview {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tv-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tv-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.tv-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.tv-search {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 13px;
+  outline: none;
+}
+.tv-search:focus {
+  border-color: var(--accent);
+}
+.tv-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.tv-group-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7c7c7c;
+  margin-bottom: 6px;
+}
+.tv-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 4px;
+}
+.tv-tile {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.tv-tile:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+}
+.tv-tile.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--accent);
+}
+.tv-tile-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.tv-tile-shape {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.tv-tile-meta {
+  font-size: 9px;
+  color: #7c7c7c;
+  margin-top: 2px;
 }

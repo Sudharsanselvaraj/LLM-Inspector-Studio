@@ -18,6 +18,8 @@ import ConfigDiff from "./ui/ConfigDiff";
 import AblationPanel from "./ui/AblationPanel";
 import TokenDetailView from "./ui/TokenDetailView";
 import KvCacheTimeline from "./ui/KvCacheTimeline";
+import DistributionPanel from "./ui/DistributionPanel";
+import TileView from "./ui/TileView";
 import TokenStrip from "./ui/TokenStrip";
 import { fmtShape } from "@/lib/format";
 import { roleLabel } from "@/lib/tensorName";
@@ -29,6 +31,7 @@ export default function AppShell() {
   const mode = useStore((s) => s.mode);
   const hovName = useStore((s) => s.hoveredTensor);
   const devMode = useStore((s) => s.devMode);
+  const tileView = useStore((s) => s.tileView);
   const [mouse, setMouse] = useState({ x: 0, y: 0, inside: false });
 
   useKeyboard();
@@ -60,7 +63,7 @@ export default function AppShell() {
         }}
         onMouseLeave={() => setMouse((m) => ({ ...m, inside: false }))}
       >
-        <SceneLoader />
+        {tileView ? <TileView /> : <SceneLoader />}
         {mode === "generation" && <GenerationTopControls />}
         {mode === "generation" && <TokenStrip />}
         {mode === "walkthrough" && <EvolutionTimeline />}
@@ -70,6 +73,7 @@ export default function AppShell() {
         {devMode && <HeadInspector />}
         {devMode && <DataExport />}
         {devMode && <TimingReadout />}
+        {devMode && <DistributionPanel />}
         {devMode && <ConfigDiff />}
         {devMode && <AblationPanel />}
         {mode === "explorer" && hov && mouse.inside && (
@@ -90,9 +94,11 @@ export default function AppShell() {
             </div>
           </div>
         )}
-        <div className="canvas-hint">
-          drag to orbit · scroll to zoom · <kbd>Space</kbd> play · <kbd>F10</kbd> op · <kbd>J</kbd><kbd>K</kbd> token
-        </div>
+        {!tileView && (
+          <div className="canvas-hint">
+            drag to orbit · scroll to zoom · <kbd>Space</kbd> play · <kbd>F10</kbd> op · <kbd>J</kbd><kbd>K</kbd> token
+          </div>
+        )}
       </div>
       <RightPanel />
     </div>

@@ -137,6 +137,10 @@ interface NeuroState {
   toggleDevMode: () => void;
   setBrightness: (n: number) => void;
 
+  // Tile grid view (Phase 2).
+  tileView: boolean;
+  setTileView: (v: boolean) => void;
+
   // Educational walkthrough.
   wtChapter: number;
   wtModel: string;
@@ -444,6 +448,9 @@ export const useStore = create<NeuroState>((set) => ({
   toggleEquations: () => set((s) => ({ showEquations: !s.showEquations })),
   toggleDevMode: () => set((s) => ({ devMode: !s.devMode })),
   setBrightness: (n) => set({ brightness: Math.max(0.3, Math.min(n, 2.5)) }),
+
+  tileView: false,
+  setTileView: (v) => set({ tileView: v }),
 
   wtChapter: 0,
   wtModel: "qwen05",
