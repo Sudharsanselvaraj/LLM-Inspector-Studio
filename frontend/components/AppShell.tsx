@@ -21,6 +21,7 @@ import KvCacheTimeline from "./ui/KvCacheTimeline";
 import DistributionPanel from "./ui/DistributionPanel";
 import TileView from "./ui/TileView";
 import TokenStrip from "./ui/TokenStrip";
+import DebuggerPane from "./ui/DebuggerPane";
 import { fmtShape } from "@/lib/format";
 import { roleLabel } from "@/lib/tensorName";
 import { useKeyboard } from "@/lib/useKeyboard";
@@ -63,7 +64,13 @@ export default function AppShell() {
         }}
         onMouseLeave={() => setMouse((m) => ({ ...m, inside: false }))}
       >
-        {tileView ? <TileView /> : <SceneLoader />}
+        {mode === "debugger" ? (
+          <DebuggerPane />
+        ) : tileView ? (
+          <TileView />
+        ) : (
+          <SceneLoader />
+        )}
         {mode === "generation" && <GenerationTopControls />}
         {mode === "generation" && <TokenStrip />}
         {mode === "walkthrough" && <EvolutionTimeline />}

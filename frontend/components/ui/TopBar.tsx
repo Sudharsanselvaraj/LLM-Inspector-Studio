@@ -10,6 +10,7 @@ const MODES: { id: Mode; label: string }[] = [
   { id: "explorer", label: "Architecture" },
   { id: "generation", label: "Generation" },
   { id: "walkthrough", label: "Walkthrough" },
+  { id: "debugger", label: "Debugger" },
 ];
 
 export default function TopBar() {

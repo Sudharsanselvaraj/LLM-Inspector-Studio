@@ -32,6 +32,44 @@ export default function RightPanel() {
   const data = useStore((s) => s.data);
 
   if (mode === "generation") return <GenerationPanel />;
+  if (mode === "debugger") {
+    return (
+      <div className="rightpanel">
+        <div className="side-title">Debugger</div>
+        <div className="rp-overview">
+          {arch ? (
+            <>
+              <div className="rp-modelname">{arch.metadata.name}</div>
+              <div className="side-hint">
+                All debug tools are shown in the main canvas area. Select a
+                tensor in the sidebar to inspect.
+              </div>
+              <div className="rp-statgrid">
+                <div className="rp-stat">
+                  <span>Tensors</span>
+                  <b>{arch.tensor_count}</b>
+                </div>
+                <div className="rp-stat">
+                  <span>Layers</span>
+                  <b>{arch.metadata.num_layers}</b>
+                </div>
+                <div className="rp-stat">
+                  <span>Heads</span>
+                  <b>{arch.metadata.num_heads}</b>
+                </div>
+                <div className="rp-stat">
+                  <span>Params</span>
+                  <b>{fmtCount(arch.metadata.total_params)}</b>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="rp-empty">Load a model to begin debugging.</div>
+          )}
+        </div>
+      </div>
+    );
+  }
   if (mode === "walkthrough") {
     const d = data;
     return (

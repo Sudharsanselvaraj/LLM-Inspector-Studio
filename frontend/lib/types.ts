@@ -44,7 +44,7 @@ export interface AnalyzeResponse {
 export type District = "tokenizer" | "embedding" | "attention" | "generation";
 
 // --- Overhaul: modes + architecture explorer ----------------------------- //
-export type Mode = "explorer" | "generation" | "walkthrough";
+export type Mode = "explorer" | "generation" | "walkthrough" | "debugger";
 
 export interface TensorInfo {
   name: string;

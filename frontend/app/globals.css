@@ -2790,3 +2790,82 @@ code {
   color: var(--text);
   text-align: right;
 }
+
+/* --- Debugger Dashboard (Phase 2) ------------------------------------------ */
+.dbg-dashboard {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 14px;
+}
+.dbg-toolbar {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.dbg-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.dbg-subtitle {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.dbg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+}
+.dbg-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 120px;
+  position: relative;
+}
+.dbg-card-wide {
+  grid-column: 1 / -1;
+}
+.dbg-card-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7c7c7c;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 6px;
+}
+.dbg-empty {
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Reset absolute positioning of child panels when inside debugger dashboard. */
+.dbg-card .debug-panel,
+.dbg-card .head-inspector,
+.dbg-card .timing-panel,
+.dbg-card .dist-panel,
+.dbg-card .config-diff,
+.dbg-card .data-export,
+.dbg-card .ablation-panel {
+  position: static;
+  inset: auto;
+  width: auto;
+  max-height: none;
+  backdrop-filter: none;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  z-index: auto;
+  margin: 0;
+  overflow: visible;
+}
