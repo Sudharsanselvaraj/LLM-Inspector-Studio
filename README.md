@@ -10,6 +10,9 @@
   <img src="https://img.shields.io/badge/data-100%25%20real%20forward%20pass-0a0a0a.svg?style=flat" alt="Real data only" />
   <img src="https://img.shields.io/badge/backend-FastAPI%20·%20PyTorch-009688.svg?style=flat" alt="Backend: FastAPI + PyTorch" />
   </a>
+  <a href="https://github.com/Sudharsanselvaraj/Token-Print">
+  <img src="https://img.shields.io/badge/stars-29-0a0a0a.svg?style=flat" alt="Stars" />
+</a>
 </p>
 
 ---
